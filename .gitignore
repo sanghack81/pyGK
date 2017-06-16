@@ -1,0 +1,5 @@
+.idea
+temporary
+*.pyc
+.cache
+build
