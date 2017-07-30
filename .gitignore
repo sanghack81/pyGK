@@ -3,3 +3,4 @@ temporary
 *.pyc
 .cache
 build
+.coverage*

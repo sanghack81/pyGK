@@ -1,7 +1,7 @@
 import collections
-import itertools
 import warnings
 
+import itertools
 import numpy as np
 from scipy.sparse import dok_matrix
 from scipy.sparse.linalg import LinearOperator
