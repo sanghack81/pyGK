@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/sanghack81/pyGK.svg?branch=master)](https://travis-ci.org/sanghack81/pyGK)
+[![Coverage Status](https://coveralls.io/repos/github/sanghack81/pyGK/badge.svg?branch=master)](https://coveralls.io/github/sanghack81/pyGK?branch=master)
+
 # pyGK
 ### Python Graph Kernels
 
