@@ -29,7 +29,7 @@ def normalize(K):
 
 def read_mutag(f_name=None):
     if f_name is None:
-        f_name = '../../data/MUTAG'
+        f_name = 'data/MUTAG'
 
     full_data = loadmat(f_name)
     return matlab_graphs_2_kgraphs(full_data['MUTAG'])
@@ -37,7 +37,7 @@ def read_mutag(f_name=None):
 
 def read_enzyme(f_name=None):
     if f_name is None:
-        f_name = '../../data/ENZYMES'
+        f_name = 'data/ENZYMES'
 
     full_data = loadmat(f_name)
     return matlab_graphs_2_kgraphs(full_data['ENZYMES'])
@@ -48,14 +48,14 @@ class TestEquivalentToMatlabCode(unittest.TestCase):
         graphs = read_mutag()
         my_Ks = weisfeiler_lehman_kernel(graphs, 3)
 
-        full_data = loadmat('../../data/validation/WL_K3')
+        full_data = loadmat('data/validation/WL_K3')
         nino_Ks = list(full_data['Ks'].flatten())
 
         tests = my_Ks[-1] == nino_Ks[-1]
         assert all(tests.flatten())
 
     def test_spkernel(self):
-        full_data = loadmat('../../data/validation/spkernel_K')
+        full_data = loadmat('data/validation/spkernel_K')
         nino_K = full_data['K']
 
         graphs = read_mutag()
@@ -65,7 +65,7 @@ class TestEquivalentToMatlabCode(unittest.TestCase):
         assert all(tests.flatten())
 
     def test_unlabeled_spkernel(self):
-        full_data = loadmat('../../data/validation/unlabeled_spkernel_K')
+        full_data = loadmat('data/validation/unlabeled_spkernel_K')
         nino_K = full_data['K']
 
         graphs = read_mutag()
@@ -76,7 +76,7 @@ class TestEquivalentToMatlabCode(unittest.TestCase):
 
     def test_count_all_graphlets(self):
         graphs = read_mutag()
-        full_data = loadmat('../../data/validation/mutag_cag')
+        full_data = loadmat('data/validation/mutag_cag')
         nino3 = full_data['mutag_ca3g']
         nino4 = full_data['mutag_ca4g']
         for i, g in enumerate(graphs):
@@ -85,7 +85,7 @@ class TestEquivalentToMatlabCode(unittest.TestCase):
             assert np.allclose(nino3[i, :], lee3) and np.allclose(nino4[i, :], lee4)
 
         graphs = read_enzyme()
-        full_data = loadmat('../../data/validation/enz_cag')
+        full_data = loadmat('data/validation/enz_cag')
         nino3 = full_data['enz_ca3g']
         nino4 = full_data['enz_ca4g']
         for i, g in enumerate(graphs):
@@ -97,9 +97,9 @@ class TestEquivalentToMatlabCode(unittest.TestCase):
         np.random.seed(0)
         mutag_graphs = read_mutag()
 
-        ninos = [loadmat('../../data/validation/gest_K3')['K3'],
-                 loadmat('../../data/validation/gest_K4')['K4'],
-                 loadmat('../../data/validation/gest_K5')['K5']]
+        ninos = [loadmat('data/validation/gest_K3')['K3'],
+                 loadmat('data/validation/gest_K4')['K4'],
+                 loadmat('data/validation/gest_K5')['K5']]
 
         mines = [gest_kernel(mutag_graphs, 3, n_jobs=-1),
                  gest_kernel(mutag_graphs, 4, n_jobs=-1),
@@ -108,7 +108,7 @@ class TestEquivalentToMatlabCode(unittest.TestCase):
         assert all(np.allclose(n, m) for n, m in zip(ninos, mines))
 
     def test_count_connected_graphlets(self):
-        data = loadmat('../../data/validation/ccgs')
+        data = loadmat('data/validation/ccgs')
 
         # MUTAG
         mutag_graphs = read_mutag()
@@ -152,13 +152,9 @@ class TestEquivalentToMatlabCode(unittest.TestCase):
 
     def test_l3g(self):
         graphs = read_mutag()
-        k = loadmat('../../data/validation/mutag_l3g')['mutag_l3g']
+        k = loadmat('data/validation/mutag_l3g')['mutag_l3g']
         assert np.allclose(k, labeled_3_graphlet_kernel(graphs))
 
     def test_random_walk(self):
         m = read_mutag()
         random_walk_kernel(m, 0.5, -1)
-
-
-if __name__ == '__main__':
-    unittest.main()

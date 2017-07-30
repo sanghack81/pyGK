@@ -1,8 +1,8 @@
 import functools
-import itertools
-import math
 from collections import defaultdict
 
+import itertools
+import math
 import numpy as np
 from joblib import Parallel, delayed
 from numpy import zeros, array, ix_
