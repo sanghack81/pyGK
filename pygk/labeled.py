@@ -1,7 +1,7 @@
 import collections
+import itertools
 import warnings
 
-import itertools
 import numpy as np
 from scipy.sparse import dok_matrix
 from scipy.sparse.linalg import LinearOperator
@@ -59,7 +59,7 @@ def labeled_shortest_path_kernel(graphs):
     Ds = [floyd_warshall(g.am) for g in graphs]
     maxpath = max(max(D[is_not_inf(D)]).astype('int') for D in Ds)
 
-    phi = dok_matrix(((maxpath + 1) * L * (L + 1) / 2, N))  # sparse
+    phi = dok_matrix(((maxpath + 1) * L * (L + 1) // 2, N))  # sparse
     for i in range(N):
         labels_aux = np.tile(as_column(labels[i]), (1, len(labels[i])))
         a, b = matlab_min_max(labels_aux, labels_aux.transpose())

@@ -143,8 +143,9 @@ class KGraph:
             if v in special_labels:
                 self.nl[nv] = special_labels[v]
             else:
-                self.nl[nv] = graph.node[v][label_key]
-            self.al[nv] = graph.neighbors(v)
+                # self.nl[nv] = graph.node[v][label_key]
+                self.nl[nv] = graph.nodes[v][label_key]
+            self.al[nv] = list(graph.neighbors(v))
 
         for v1, v2 in graph.edges():
             a, b = node_id[v1], node_id[v2]
@@ -184,7 +185,8 @@ def matlab_graphs_2_kgraphs(graphs_in_a_cell, label_key='label'):
             node_labels = g['nl'][0][0][0].flatten()  # N x 1
             assert len(node_labels) == N
             for i, label in enumerate(node_labels):
-                graph.node[i]['label'] = label
+                # graph.node[i]['label'] = label
+                graph.nodes[i]['label'] = label
         except ValueError:  # no node labels...
             pass
 
@@ -192,7 +194,8 @@ def matlab_graphs_2_kgraphs(graphs_in_a_cell, label_key='label'):
             one_based_edge_labels = g['el'][0][0][0]  # |E| x 3
             for i in range(one_based_edge_labels.shape[0]):
                 r, c, edge_label = one_based_edge_labels[i, :]
-                graph.edge[r - 1][c - 1][label_key] = edge_label
+                # graph.edge[r - 1][c - 1][label_key] = edge_label
+                graph.edges[r - 1, c - 1][label_key] = edge_label
         except ValueError:  # no edge labels...
             pass
 

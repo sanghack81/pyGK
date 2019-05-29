@@ -17,7 +17,8 @@ def rand_g():
     g = fast_gnp_random_graph(randint(5, 40), rand() * rand())
     labels = list(range(randint(2, 7)))
     for v in g:
-        g.node[v]['label'] = choice(labels)
+        # g.node[v]['label'] = choice(labels)
+        g.nodes[v]['label'] = choice(labels)
     return KGraph(g)
 
 
