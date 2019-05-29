@@ -2,3 +2,4 @@ networkx
 scipy
 numpy
 joblib
+pytest>=4.5.0
