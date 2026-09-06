@@ -145,7 +145,7 @@ class KGraph:
             else:
                 # self.nl[nv] = graph.node[v][label_key]
                 self.nl[nv] = graph.nodes[v][label_key]
-            self.al[nv] = list(graph.neighbors(v))
+            self.al[nv] = [node_id[neighbor] for neighbor in graph.neighbors(v)]
 
         for v1, v2 in graph.edges():
             a, b = node_id[v1], node_id[v2]

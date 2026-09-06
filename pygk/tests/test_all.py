@@ -2,7 +2,7 @@ import unittest
 
 import numpy as np
 from joblib import Parallel, delayed
-from networkx import fast_gnp_random_graph
+from networkx import fast_gnp_random_graph, path_graph
 from numpy.random import randint, rand, choice
 from scipy.io import loadmat
 
@@ -159,3 +159,21 @@ class TestEquivalentToMatlabCode(unittest.TestCase):
     def test_random_walk(self):
         m = read_mutag()
         random_walk_kernel(m, 0.5, -1)
+
+
+class TestKGraph(unittest.TestCase):
+    def test_arbitrary_node_ids(self):
+        for nodes in [('left', 'middle', 'right'), (10, -2, 42),
+                      (2, 0, 1), (('a', 1), ('b', 2), ('c', 3))]:
+            with self.subTest(nodes=nodes):
+                graph = path_graph(nodes)
+                for node in graph:
+                    graph.nodes[node]['label'] = 'node'
+                kgraph = KGraph(graph)
+
+                self.assertEqual(kgraph.al, [[1], [0, 2], [1]])
+                np.testing.assert_array_equal(kgraph.am, [[0, 1, 0], [1, 0, 1], [0, 1, 0]])
+                np.testing.assert_array_equal(count_all_3_graphlets(kgraph.al), [0, 1, 0, 0])
+                kernels = weisfeiler_lehman_kernel([kgraph], 1)
+                np.testing.assert_array_equal(kernels[0], [[9]])
+                np.testing.assert_array_equal(kernels[1], [[14]])
