@@ -65,5 +65,5 @@ def _random_walk(g1, g2, lambda_):
     mn = len(g1) * len(g2)
     A = LinearOperator((mn, mn), matvec=lambda x: _smt_filter(x, g1, g2, lambda_))
     b = np.ones(mn)
-    x_sol, _ = cg(A, b, tol=1.0e-6, maxiter=500)
+    x_sol, _ = cg(A, b, rtol=1.0e-6, atol=0.0, maxiter=500)
     return np.sum(x_sol)

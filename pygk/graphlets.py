@@ -3,6 +3,7 @@ from collections import defaultdict
 
 import itertools
 import math
+import numbers
 import numpy as np
 from joblib import Parallel, delayed
 from numpy import zeros, array, ix_
@@ -180,10 +181,10 @@ def _graphlet_type(am) -> int:
 # % Karsten Borgwardt
 # % 4/11/2008
 def sample_size(delta, epsilon, a):
-    if delta < 0 or delta > 1:
-        raise ValueError('delta must be in [0,1].')
-    if epsilon < 0 or epsilon > 1:
-        raise ValueError('epsilon must be in [0,1].')
+    if delta <= 0 or delta > 1:
+        raise ValueError('delta must be in (0,1].')
+    if epsilon <= 0 or epsilon > 1:
+        raise ValueError('epsilon must be in (0,1].')
     return 2 * (a * math.log(2) + math.log(1 / delta)) / (epsilon ** 2)
 
 
@@ -196,10 +197,12 @@ def gest_kernel(graphs, k, num_samples=-1, n_jobs=1):
     :param n_jobs: number of CPUs to use
     :return: a kernel matrix (N x N)
     """
-    if num_samples < -1 or round(num_samples) != num_samples:
+    if isinstance(num_samples, bool) or not isinstance(num_samples, numbers.Integral) or num_samples < -1:
         raise ValueError('The number of samples must be -1 or non-negative integer.')
-    if k < 3 or k > 6:
+    if isinstance(k, bool) or not isinstance(k, numbers.Integral) or k < 3 or k > 5:
         raise ValueError('{}-graphlet is not supported.'.format(k))
+    k = int(k)
+    num_samples = int(num_samples)
     FEAT_LEN = {3: 8, 4: 64, 5: 1024}
 
     seeds = iter([np.random.randint(np.iinfo(np.int32).max) for _ in range(len(graphs))])

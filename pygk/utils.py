@@ -143,8 +143,7 @@ class KGraph:
             if v in special_labels:
                 self.nl[nv] = special_labels[v]
             else:
-                # self.nl[nv] = graph.node[v][label_key]
-                self.nl[nv] = graph.nodes[v][label_key]
+                self.nl[nv] = graph.nodes[v].get(label_key)
             self.al[nv] = [node_id[neighbor] for neighbor in graph.neighbors(v)]
 
         for v1, v2 in graph.edges():

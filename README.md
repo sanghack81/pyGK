@@ -1,15 +1,74 @@
-[![Build Status](https://travis-ci.org/sanghack81/pyGK.svg?branch=master)](https://travis-ci.org/sanghack81/pyGK)
-[![Coverage Status](https://coveralls.io/repos/github/sanghack81/pyGK/badge.svg?branch=master)](https://coveralls.io/github/sanghack81/pyGK?branch=master)
+[![CI](https://github.com/sanghack81/pyGK/actions/workflows/ci.yml/badge.svg)](https://github.com/sanghack81/pyGK/actions/workflows/ci.yml)
 
 # pyGK
-### Python Graph Kernels
 
-`pygk` is a python implementation (under development) of a subset of graph kernels and other related methods based on [MATLAB codes](http://www.di.ens.fr/~shervashidze/code/Graphkernels/graphkernels.zip) by [Nino Shervashidze](http://www.di.ens.fr/~shervashidze).
+`pyGK` is a Python implementation of graph kernels based on MATLAB code by
+Nino Shervashidze.
 
-Following graph kernels are implemented:
+Implemented kernels include:
 
-- Shortest path kernel (for both unlabeled and discretely-labeled graph)
-- Random walk kernel (for both unlabeled and discretely-labeled graph)
-- Weisfeiler-Lehman kernel (for discretely-labeled graph)
-- 3-graphlet kernel (for discretely-labeled graph)
-- (3,4,5)-graphlet kernel (for unlabeled graph)
+- shortest-path kernels for unlabeled and discretely labeled graphs;
+- random-walk kernels for unlabeled and discretely labeled graphs;
+- the Weisfeiler-Lehman kernel for discretely labeled graphs;
+- the labeled 3-graphlet kernel;
+- unlabeled 3-, 4-, and 5-graphlet kernels.
+
+## Installation
+
+pyGK requires Python 3.10 or later.
+
+```bash
+python -m pip install .
+```
+
+For an editable development install with the test and build tools:
+
+```bash
+python -m pip install -e ".[test]"
+```
+
+## Example
+
+```python
+import networkx as nx
+
+from pygk.unlabeled import shortest_path_kernel
+from pygk.utils import KGraph
+
+graphs = [
+    KGraph(nx.path_graph(5)),
+    KGraph(nx.cycle_graph(5)),
+]
+kernel, features = shortest_path_kernel(graphs)
+print(kernel)
+```
+
+`kernel` is a 2 × 2 Gram matrix here, and `features` is the shortest-path
+feature matrix with one column per graph. Other kernel functions are in
+[`pygk.unlabeled`](pygk/unlabeled.py),
+[`pygk.labeled`](pygk/labeled.py), and
+[`pygk.graphlets`](pygk/graphlets.py).
+
+For labeled kernels, set a `label` attribute on each NetworkX node before
+constructing `KGraph`:
+
+```python
+graph = nx.path_graph(5)
+nx.set_node_attributes(graph, "carbon", "label")
+labeled_graph = KGraph(graph)
+```
+
+## Development
+
+```bash
+python -m pytest -q
+python -m ruff check .
+python -m build
+```
+
+The numerical regression tests compare results with the original MATLAB
+implementation using the datasets under `data/`.
+
+## License
+
+Apache License 2.0. See `NOTICE.txt`.

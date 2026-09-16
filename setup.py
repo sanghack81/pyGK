@@ -1,10 +1,6 @@
-from distutils.core import setup
+"""Compatibility shim for tools that do not support PEP 517 yet."""
 
-setup(
-    name='pyGK',
-    packages=['pygk'],
-    version='1.0.1',
-    description='a suite of graph kernels written in python',
-    author='Sanghack Lee',
-    author_email='sanghack.lee@gmail.com',
-)
+from setuptools import setup
+
+
+setup()

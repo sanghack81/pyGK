@@ -169,5 +169,5 @@ def _labeled_random_walk(ams1, ams2, lambda_, mn):
     # A*x=b
     A = LinearOperator((mn, mn), matvec=lambda x: _labeled_smt_filter(x, ams1, ams2, lambda_))
     b = np.ones(mn)
-    x_sol, _ = cg(A, b, tol=1.0e-6, maxiter=200)
+    x_sol, _ = cg(A, b, rtol=1.0e-6, atol=0.0, maxiter=200)
     return np.sum(x_sol)
